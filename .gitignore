@@ -9,3 +9,6 @@ repl-temp-*
 
 # Node modules
 node_modules
+
+# Public files
+public
