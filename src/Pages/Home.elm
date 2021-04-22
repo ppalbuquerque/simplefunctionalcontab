@@ -3,6 +3,7 @@ module Pages.Home exposing (init, update, view, Model, Msg)
 import Browser exposing (Document)
 import Html exposing (..)
 import Views.Header as Header
+import Views.SidebarMenu as SidebarMenu
 
 -- Model --
 type alias Model =
@@ -36,5 +37,8 @@ update msg model =
 view : Model -> Document Msg
 view model =
   { title = "Home"
-  , body = [Header.view ]
+  , body = [ 
+    Header.view "Listagem de entradas" 
+  , SidebarMenu.view
+  ]
   }
