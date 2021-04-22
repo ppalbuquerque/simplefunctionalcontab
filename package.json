@@ -2,8 +2,8 @@
   "scripts": {
     "watch:elm": "chokidar './src/**/*.elm' -c 'elm make ./src/Main.elm --output ./public/js/elm.compiled.js --debug' --initial",
     "build:elm": "elm make ./src/Main.elm --output ./public/js/elm.compiled.js --optimize",
-    "build:css": "node-sass-chokidar assets/sass/ -o public/css",
-    "watch:css": "npm run build:css && node-sass-chokidar assets/sass/ -o public/css --watch --recursive",
+    "build:css": "node-sass-chokidar assets/scss/ -o public/css",
+    "watch:css": "npm run build:css && node-sass-chokidar assets/scss/ -o public/css --watch --recursive",
     "dev-server": "browser-sync start --server 'public' --files 'public/**/*.*'",
     "build": "npm-run-all -p build:css build:elm",
     "start": "npm-run-all -p watch:css watch:elm dev-server"
