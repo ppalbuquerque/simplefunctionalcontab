@@ -15,9 +15,6 @@ type alias Model =
 
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url navKey =
-  let
-    _ = Debug.log "Value of url: " url
-  in
   changeRoute (Route.parseUrl url)
 
 -- Routing --

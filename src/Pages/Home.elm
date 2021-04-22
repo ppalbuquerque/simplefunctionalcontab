@@ -2,6 +2,7 @@ module Pages.Home exposing (init, update, view, Model, Msg)
 
 import Browser exposing (Document)
 import Html exposing (..)
+import Views.Header as Header
 
 -- Model --
 type alias Model =
@@ -35,5 +36,5 @@ update msg model =
 view : Model -> Document Msg
 view model =
   { title = "Home"
-  , body = [div [] [ h3 [] [ text "Home Page" ] ]] 
+  , body = [Header.view ]
   }
