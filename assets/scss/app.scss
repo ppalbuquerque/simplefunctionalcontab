@@ -6,4 +6,8 @@
 @import "core/_typography.scss";
 
 // Component files
-@import "components/_header.scss"
+@import "components/_header.scss";
+@import "components/_sidebar.scss";
+
+// Layout files
+@import "layout/_container.scss";

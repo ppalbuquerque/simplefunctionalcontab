@@ -1,0 +1,9 @@
+.wrapper {
+  transition: transform 0.3s ease;
+}
+
+#hamburguer-checkbox:checked ~ .wrapper {
+  width: calc(100% - 205px);
+
+  transform: translateX(205px);
+}

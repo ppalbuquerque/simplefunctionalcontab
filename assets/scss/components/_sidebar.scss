@@ -1,0 +1,17 @@
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+
+  transform: translateX(-205px);
+
+  height: 100%;
+  width: 205px;
+
+  background-color: $primary-color;
+
+  transition: 0.3s transform ease;
+}
+
+input[type=checkbox]:checked ~ .sidebar-menu {
+  transform: translateX(0px);
+}

@@ -2,6 +2,7 @@ module Pages.Home exposing (init, update, view, Model, Msg)
 
 import Browser exposing (Document)
 import Html exposing (..)
+import Html.Attributes exposing (type_, id, style, class)
 import Views.Header as Header
 import Views.SidebarMenu as SidebarMenu
 
@@ -37,8 +38,11 @@ update msg model =
 view : Model -> Document Msg
 view model =
   { title = "Home"
-  , body = [ 
-    Header.view "Listagem de entradas" 
-  , SidebarMenu.view
-  ]
+  , body = 
+    [
+      input [ type_ "checkbox", id "hamburguer-checkbox", style "display" "none" ] []
+      , div [ class "wrapper" ]
+        [ Header.view "Listagem de entradas" ] 
+    , SidebarMenu.view
+    ]
   }
