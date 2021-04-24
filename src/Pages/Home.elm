@@ -50,7 +50,16 @@ view model =
       , div [ class "wrapper" ]
         [ Header.view "Listagem de entradas" 
         , div [ class "content" ]
-            [ viewEntryCard mockEntry ]
+            [ div [ class "page-top-section" ]
+                [ h1 [ class "page-title" ] [ text "Entradas" ]
+                , div []
+                    [ button [ class "primary-button" ]
+                        [ text "Nova Entrada" ]
+                    , button [ class "warning-button", style "margin-left" "1rem" ]
+                        [ text "Fechar Semana" ] ] 
+                ]
+            , viewEntryCard mockEntry 
+            ]
         ] 
     , SidebarMenu.view
     ]

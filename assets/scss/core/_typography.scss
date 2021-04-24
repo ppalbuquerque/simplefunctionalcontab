@@ -2,6 +2,10 @@ body {
   font-family: Roboto, sans-serif;
 }
 
+button {
+  font-family: Roboto, sans-serif;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
 }
@@ -12,5 +16,5 @@ h4, h5, h6 {
 
 .page-title {
   font-size: 1.5rem;
-  color: $primary-color;
+  color: $black;
 }

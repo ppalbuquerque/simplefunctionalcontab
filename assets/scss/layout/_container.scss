@@ -9,5 +9,13 @@
 }
 
 .content {
-  padding: 1rem;
+  padding: 1.5rem 2rem;
+}
+
+.page-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 1.5rem;
 }

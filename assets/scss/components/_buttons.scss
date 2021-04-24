@@ -1,0 +1,7 @@
+.primary-button {
+  @include button-variant($white, $light-primary-color);
+}
+
+.warning-button {
+  @include button-variant($black, $warning-color);
+}

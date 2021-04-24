@@ -1,5 +1,6 @@
 // Abstract files
 @import "abstracts/_variables.scss";
+@import "abstracts/_mixins.scss";
 
 // Core files
 @import "core/_reset.scss";
@@ -9,6 +10,7 @@
 @import "components/_header.scss";
 @import "components/_sidebar.scss";
 @import "components/_entrycard.scss";
+@import "components/_buttons.scss";
 
 // Layout files
 @import "layout/_container.scss";
