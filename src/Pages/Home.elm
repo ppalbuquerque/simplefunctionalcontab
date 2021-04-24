@@ -2,9 +2,12 @@ module Pages.Home exposing (init, update, view, Model, Msg)
 
 import Browser exposing (Document)
 import Html exposing (..)
-import Html.Attributes exposing (type_, id, style, class)
+import Html.Attributes exposing (type_, id, style, class, default)
 import Views.Header as Header
 import Views.SidebarMenu as SidebarMenu
+import Views.EntryCard exposing (viewEntryCard)
+
+import Data.Entry exposing (Entry)
 
 -- Model --
 type alias Model =
@@ -37,12 +40,18 @@ update msg model =
 -- View --
 view : Model -> Document Msg
 view model =
+  let
+    mockEntry = Entry "19/04/2021" 100  100 100  
+  in
   { title = "Home"
   , body = 
     [
-      input [ type_ "checkbox", id "hamburguer-checkbox", style "display" "none" ] []
+      input [ type_ "checkbox", id "hamburguer-checkbox", default True,style "display" "none" ] []
       , div [ class "wrapper" ]
-        [ Header.view "Listagem de entradas" ] 
+        [ Header.view "Listagem de entradas" 
+        , div [ class "content" ]
+            [ viewEntryCard mockEntry ]
+        ] 
     , SidebarMenu.view
     ]
   }
