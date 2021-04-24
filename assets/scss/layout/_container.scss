@@ -3,7 +3,11 @@
 }
 
 #hamburguer-checkbox:checked ~ .wrapper {
-  width: calc(100% - 205px);
+  width: calc(100% - #{$sidebar-width});
 
-  transform: translateX(205px);
+  transform: translateX($sidebar-width);
+}
+
+.content {
+  padding: 1rem;
 }

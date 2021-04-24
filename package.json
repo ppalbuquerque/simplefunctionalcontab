@@ -4,6 +4,7 @@
     "build:elm": "elm make ./src/Main.elm --output ./public/js/elm.compiled.js --optimize",
     "build:css": "node-sass-chokidar assets/scss/ -o public/css",
     "watch:css": "npm run build:css && node-sass-chokidar assets/scss/ -o public/css --watch --recursive",
+    "images:cp": "mkdir -p ./public/assets/images && cp -rv ./assets/images ./public/assets/",
     "dev-server": "browser-sync start --server 'public' --files 'public/**/*.*'",
     "build": "npm-run-all -p build:css build:elm",
     "start": "npm-run-all -p watch:css watch:elm dev-server"
