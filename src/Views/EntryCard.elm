@@ -3,6 +3,7 @@ module Views.EntryCard exposing (viewEntryCard)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Data.Entry exposing (Entry)
+import Formatter
 
 viewEntryCard : Entry -> Html msg
 viewEntryCard entry = 
@@ -11,15 +12,15 @@ viewEntryCard entry =
     , div []
         [ div []
             [ span [ class "info-title" ] [ text "Valor atual" ]
-            ,  span [] [ text (String.fromInt entry.actualValue) ] 
+            ,  span [] [ text (Formatter.toBrlCurrency entry.actualValue) ] 
             ]
         , div []
             [ span [ class "info-title" ] [ text "Ganho" ]
-            ,  span [ class "entry-gain-text" ] [ text ("+ " ++ String.fromInt entry.gain) ] 
+            ,  span [ class "entry-gain-text" ] [ text ("+ " ++ Formatter.toBrlCurrency entry.gain) ] 
             ]
         , div []
             [ span [ class "info-title" ] [ text "Acumulado" ]
-            ,  span [] [ text (String.fromInt entry.acumulated) ] 
+            ,  span [] [ text (Formatter.toBrlCurrency entry.acumulated) ] 
             ]
         ]
     ]
