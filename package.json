@@ -6,13 +6,17 @@
     "watch:css": "npm run build:css && node-sass-chokidar assets/scss/ -o public/css --watch --recursive",
     "images:cp": "mkdir -p ./public/assets/images && cp -rv ./assets/images ./public/assets/",
     "dev-server": "browser-sync start --server 'public' --files 'public/**/*.*'",
+    "mock-server": "json-server --watch ./server/db.json --port 5000",
     "build": "npm-run-all -p build:css build:elm",
-    "start": "npm-run-all -p watch:css watch:elm dev-server"
+    "start": "npm-run-all -p watch:css watch:elm dev-server mock-server"
   },
   "devDependencies": {
     "browser-sync": "^2.26.14",
     "chokidar-cli": "^2.1.0",
     "node-sass-chokidar": "^1.5.0",
     "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "json-server": "^0.16.3"
   }
 }
