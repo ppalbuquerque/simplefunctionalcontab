@@ -91,7 +91,7 @@ viewEntries entries =
       h3 [] [ text "Loading" ]
     
     RemoteData.Success entriesFetched ->
-      div []
+      div [ class "list-entries" ]
         (List.map viewEntryCard entriesFetched)
     
     RemoteData.Failure httpError ->

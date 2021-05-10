@@ -8,7 +8,7 @@ import Formatter
 viewEntryCard : Entry -> Html msg
 viewEntryCard entry = 
   div [ class "entry-card-container" ]
-    [ span [] [ text entry.date ] 
+    [ span [] [ text (Formatter.toDateString entry.date) ] 
     , div []
         [ div []
             [ span [ class "info-title" ] [ text "Valor atual" ]

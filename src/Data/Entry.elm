@@ -11,7 +11,7 @@ import Json.Decode.Pipeline exposing (required)
 
 type alias Entry =
     { id : EntryId
-    , date : String
+    , date : Int
     , dayValue : Int
     , profit: Int
     , acumulated: Int
@@ -32,7 +32,7 @@ entryDecoder : Decoder Entry
 entryDecoder =
     Decode.succeed Entry
       |> required "id" idDecoder
-      |> required "date" string
+      |> required "date" int
       |> required "dayValue" int
       |> required "profit" int
       |> required "acumulated" int
