@@ -3,29 +3,48 @@ module Pages.Home exposing (init, update, view, Model, Msg)
 import Browser exposing (Document)
 import Html exposing (..)
 import Html.Attributes exposing (type_, id, style, class, default)
+import Http
+import RemoteData exposing (WebData)
+
 import Views.Header as Header
 import Views.SidebarMenu as SidebarMenu
 import Views.EntryCard exposing (viewEntryCard)
-
-import Data.Entry exposing (Entry)
+import Data.Entry exposing (Entry, entriesDecoder)
 
 -- Model --
 type alias Model =
-  { entries : List String }
+  { entries : WebData (List Entry) }
 
-init : ( Model, Cmd Msg )
-init =
-  (initialModel, Cmd.none)
+init : WebData (List Entry) -> ( Model, Cmd Msg )
+init entries =
+  let
+    initialCmd =
+      if RemoteData.isNotAsked entries then
+        fetchEntries
+      else
+        Cmd.none
+  in
+  (initialModel entries, initialCmd)
 
-initialModel : Model
-initialModel =
-  { entries = ["Entry 1", "Entry 2"] }
+initialModel : WebData (List Entry) -> Model
+initialModel entries =
+  { entries = entries }
+
+-- API
+fetchEntries : Cmd Msg
+fetchEntries =
+  Http.get
+    { url = "http://localhost:5000/entries"
+    , expect =
+        entriesDecoder
+          |> Http.expectJson (RemoteData.fromResult >> EntriesReceived)
+    }
 
 -- Update --
 
 type Msg 
   = FetchEntries
-  | EntriesReceived (List String)
+  | EntriesReceived (WebData (List Entry))
 
 update : Msg -> Model ->  ( Model, Cmd Msg )
 update msg model =
@@ -34,15 +53,12 @@ update msg model =
           ( model, Cmd.none )
         
         EntriesReceived entries ->
-          ( model, Cmd.none )
+          ( { model | entries = entries }, Cmd.none )
 
 
 -- View --
 view : Model -> Document Msg
 view model =
-  let
-    mockEntry = Entry "19/04/2021" 100  100 100  
-  in
   { title = "Home"
   , body = 
     [
@@ -58,9 +74,25 @@ view model =
                     , button [ class "warning-button", style "margin-left" "1rem" ]
                         [ text "Fechar Semana" ] ] 
                 ]
-            , viewEntryCard mockEntry 
+            , viewEntries model.entries
             ]
         ] 
     , SidebarMenu.view
     ]
   }
+
+viewEntries : WebData (List Entry) -> Html Msg
+viewEntries entries =
+  case entries of
+    RemoteData.NotAsked ->
+      text ""
+    
+    RemoteData.Loading ->
+      h3 [] [ text "Loading" ]
+    
+    RemoteData.Success entriesFetched ->
+      div []
+        (List.map viewEntryCard entriesFetched)
+    
+    RemoteData.Failure httpError ->
+      text "Error on fetch"

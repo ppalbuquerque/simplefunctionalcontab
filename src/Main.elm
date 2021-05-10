@@ -5,6 +5,7 @@ import Url exposing (Url)
 import Html exposing (..)
 import Pages.Home as HomePage
 import Route exposing (Route(..))
+import RemoteData exposing (WebData)
 
 type Page
   = NotFound
@@ -25,7 +26,7 @@ changeRoute route =
       ( NotFound, Cmd.none )
 
     Route.Home ->
-      HomePage.init
+      HomePage.init RemoteData.NotAsked
         |> updateWith Home HomeMsg
 
 -- Update --
@@ -34,9 +35,15 @@ type Msg
   | LinkClicked UrlRequest
   | HomeMsg HomePage.Msg
 
-update : Msg -> Model -> (Model, Cmd msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
-    (model, Cmd.none)
+    case (msg, model) of
+      (HomeMsg subMsg, Home home) ->
+        HomePage.update subMsg home
+          |> updateWith Home HomeMsg
+
+      (_, _) ->
+        (model, Cmd.none)
 
 updateWith : (subModel -> Model) -> (subMsg -> Msg) -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
 updateWith toModel toMsg ( subModel, subCmd ) =
