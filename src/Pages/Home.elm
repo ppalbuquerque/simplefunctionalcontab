@@ -3,17 +3,21 @@ module Pages.Home exposing (init, update, view, Model, Msg)
 import Browser exposing (Document)
 import Html exposing (..)
 import Html.Attributes exposing (type_, id, style, class, default)
+import Html.Events exposing (onClick)
 import Http
 import RemoteData exposing (WebData)
 
 import Views.Header as Header
 import Views.SidebarMenu as SidebarMenu
 import Views.EntryCard exposing (viewEntryCard)
+import Views.TextInput
 import Data.Entry exposing (Entry, entriesDecoder)
 
 -- Model --
 type alias Model =
-  { entries : WebData (List Entry) }
+  { entries : WebData (List Entry)
+  , isModalOpen : Bool 
+  }
 
 init : WebData (List Entry) -> ( Model, Cmd Msg )
 init entries =
@@ -28,7 +32,9 @@ init entries =
 
 initialModel : WebData (List Entry) -> Model
 initialModel entries =
-  { entries = entries }
+  { entries = entries
+  , isModalOpen = False 
+  }
 
 -- API
 fetchEntries : Cmd Msg
@@ -45,6 +51,7 @@ fetchEntries =
 type Msg 
   = FetchEntries
   | EntriesReceived (WebData (List Entry))
+  | OpenAddModal
 
 update : Msg -> Model ->  ( Model, Cmd Msg )
 update msg model =
@@ -54,6 +61,9 @@ update msg model =
         
         EntriesReceived entries ->
           ( { model | entries = entries }, Cmd.none )
+        
+        OpenAddModal ->
+          ( { model | isModalOpen = True }, Cmd.none )
 
 
 -- View --
@@ -69,7 +79,7 @@ view model =
             [ div [ class "page-top-section" ]
                 [ h1 [ class "page-title" ] [ text "Entradas" ]
                 , div []
-                    [ button [ class "primary-button" ]
+                    [ button [ class "primary-button", onClick OpenAddModal ]
                         [ text "Nova Entrada" ]
                     , button [ class "warning-button", style "margin-left" "1rem" ]
                         [ text "Fechar Semana" ] ] 
@@ -78,6 +88,7 @@ view model =
             ]
         ] 
     , SidebarMenu.view
+    , viewAddEntryForm model.isModalOpen
     ]
   }
 
@@ -96,3 +107,18 @@ viewEntries entries =
     
     RemoteData.Failure httpError ->
       text "Error on fetch"
+
+viewAddEntryForm : Bool -> Html Msg
+viewAddEntryForm isModalOpen =
+  if isModalOpen then
+    div [ class "overlay" ]
+      [ div [ class "modal-card" ] 
+          [ h3 [ class "page-title" ] [ text "Criar nova entrada" ] 
+          , span [] [ text "Coloque o valor da venda e data associada." ]  
+          , div [ class "add-entry-form-inputs" ]
+              [ Views.TextInput.view "Comissão" ]
+          ]
+      ]
+  else
+    div [] []
+    

@@ -1,0 +1,26 @@
+.text-input-container {
+  display: flex;
+  flex-direction: column;
+
+  & > label {
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: $primary-color-neutral;
+  }
+
+  & > input {
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.5rem;
+
+    color: hsla(217, 14%, 54%, 1);
+    background-color: hsla(210, 25%, 98%, 1);
+    border-color: hsla(223, 12%, 89%, 1);
+    border-width: 2px;
+    border-radius: 3px;
+    border-style: solid;
+
+    &:focus {
+      outline: rgba(224, 225, 230, 0.808);
+    }
+  }
+}

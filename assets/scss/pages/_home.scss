@@ -6,3 +6,34 @@
     margin-top: 1rem;
   }
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  background-color: rgba($color: #000000, $alpha: 0.5);
+}
+
+.modal-card {
+  max-width: 50%;
+  transform: translateY(100%);
+
+  margin: 0 auto;
+  padding: 1.5rem;
+
+  border-radius: 8px;
+  background-color: $white;
+
+  & > span {
+    display: block;
+    margin-top: 0.5rem;
+  }
+}
+
+.add-entry-form-inputs {
+  margin-top: 1rem;
+}
