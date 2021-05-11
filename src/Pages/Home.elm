@@ -1,4 +1,4 @@
-module Pages.Home exposing (init, update, view, Model, Msg)
+module Pages.Home exposing ( init, update, view, Model, Msg)
 
 import Browser exposing (Document)
 import Html exposing (..)
@@ -12,11 +12,29 @@ import Views.SidebarMenu as SidebarMenu
 import Views.EntryCard exposing (viewEntryCard)
 import Views.TextInput
 import Data.Entry exposing (Entry, entriesDecoder)
+import Date exposing (Date)
+import DatePicker exposing (DateEvent(..), defaultSettings)
+import Formatter exposing (formatMonthToPtBr, formatDayToPtBr)
 
 -- Model --
+type alias NewEntry =
+    { date : Maybe Date
+    , datePicker : DatePicker.DatePicker 
+    }
+
 type alias Model =
   { entries : WebData (List Entry)
-  , isModalOpen : Bool 
+  , isModalOpen : Bool
+  , newEntry : NewEntry 
+  }
+
+datePickerSettings : DatePicker.Settings
+datePickerSettings =
+  { defaultSettings | 
+    placeholder = "Escolha uma data"
+  , dateFormatter = Date.format "dd/MM/yyyy"
+  , monthFormatter = formatMonthToPtBr
+  , dayFormatter = formatDayToPtBr
   }
 
 init : WebData (List Entry) -> ( Model, Cmd Msg )
@@ -27,13 +45,19 @@ init entries =
         fetchEntries
       else
         Cmd.none
+    
+    ( datePicker, datePickerCmd ) =
+      DatePicker.init
   in
-  (initialModel entries, initialCmd)
+  (initialModel entries datePicker
+  , Cmd.batch [ initialCmd, Cmd.map ToDatePicker datePickerCmd ]
+  )
 
-initialModel : WebData (List Entry) -> Model
-initialModel entries =
+initialModel : WebData (List Entry) -> DatePicker.DatePicker -> Model
+initialModel entries datePicker =
   { entries = entries
-  , isModalOpen = False 
+  , isModalOpen = True
+  , newEntry = NewEntry Nothing datePicker 
   }
 
 -- API
@@ -52,6 +76,7 @@ type Msg
   = FetchEntries
   | EntriesReceived (WebData (List Entry))
   | OpenAddModal
+  | ToDatePicker DatePicker.Msg
 
 update : Msg -> Model ->  ( Model, Cmd Msg )
 update msg model =
@@ -64,6 +89,25 @@ update msg model =
         
         OpenAddModal ->
           ( { model | isModalOpen = True }, Cmd.none )
+        
+        ToDatePicker subMsg ->
+          let
+            ( newDatePicker, dateEvent ) =
+              DatePicker.update datePickerSettings subMsg model.newEntry.datePicker
+            
+            newDate =
+              case dateEvent of
+                Picked changedDate ->
+                  Just changedDate
+                
+                _ ->
+                  model.newEntry.date
+            
+            oldEntryForm = model.newEntry
+            newEntryForm = 
+              { oldEntryForm | date = newDate, datePicker = newDatePicker }
+          in
+          ( { model | newEntry = newEntryForm  }, Cmd.none )
 
 
 -- View --
@@ -88,7 +132,7 @@ view model =
             ]
         ] 
     , SidebarMenu.view
-    , viewAddEntryForm model.isModalOpen
+    , viewAddEntryForm model.isModalOpen model.newEntry.date model.newEntry.datePicker
     ]
   }
 
@@ -108,15 +152,18 @@ viewEntries entries =
     RemoteData.Failure httpError ->
       text "Error on fetch"
 
-viewAddEntryForm : Bool -> Html Msg
-viewAddEntryForm isModalOpen =
+viewAddEntryForm : Bool -> Maybe Date -> DatePicker.DatePicker -> Html Msg
+viewAddEntryForm isModalOpen date pickerDate =
   if isModalOpen then
     div [ class "overlay" ]
       [ div [ class "modal-card" ] 
           [ h3 [ class "page-title" ] [ text "Criar nova entrada" ] 
           , span [] [ text "Coloque o valor da venda e data associada." ]  
           , div [ class "add-entry-form-inputs" ]
-              [ Views.TextInput.view "Comissão" ]
+              [ Views.TextInput.view "Comissão" 
+              , DatePicker.view date datePickerSettings pickerDate
+                  |> Html.map ToDatePicker 
+              ]
           ]
       ]
   else
